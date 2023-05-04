@@ -21,8 +21,6 @@ urlpatterns = [
     path('command/type/all', CommandTypesListView.as_view()),
     path('command/type/<int:pk>', CommandTypeDetailView.as_view()),
 
-    # path('auth/', include('djoser.urls')),
-    # path('auth_token/', include('djoser.urls.authtoken')),
 
 
 
