@@ -27,7 +27,7 @@ class CommandCreateView(generics.CreateAPIView):
     serializer_class = CommandDetailSerializer
 
 
-class CommandsListView(generics.RetrieveUpdateDestroyAPIView):
+class CommandsListView(generics.ListAPIView):
     serializer_class = CommandsListView
     queryset = Command.objects.all()
 
@@ -43,8 +43,8 @@ class CommandLinkCreateView(generics.CreateAPIView):
     serializer_class = CommandLinkDetailSerializer
 
 
-class CommandsLinkListView(generics.RetrieveUpdateDestroyAPIView):
-    serializer_class = CommandsLinkListView
+class CommandLinksListView(generics.ListAPIView):
+    serializer_class = CommandLinksListView
     queryset = Link_command.objects.all()
 
 
@@ -52,3 +52,17 @@ class CommandsLinkListView(generics.RetrieveUpdateDestroyAPIView):
 class CommandLinkDetailView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = CommandLinkDetailSerializer
     queryset = Link_command.objects.all()
+
+class CommandTypeCreateView(generics.CreateAPIView):
+    serializer_class = CommandTypeDetailSerializer
+
+class CommandTypesListView(generics.ListAPIView):
+    serializer_class = CommandTypesListView
+    queryset = Type_command.objects.all()
+
+
+class CommandTypeDetailView(generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = CommandLinkDetailSerializer
+    queryset = Type_command.objects.all()
+
+
