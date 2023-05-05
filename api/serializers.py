@@ -69,7 +69,7 @@ class CustomUserCreateSerializer(UserCreateSerializer):
 
     class Meta:
         model = User
-        fields = ('id', 'email', 'first_name', 'last_name')
+        fields = ('id', 'email', 'password','username')
 
 class CustomTokenSerializer(TokenSerializer):
     user_id = serializers.IntegerField(source='user.id')
