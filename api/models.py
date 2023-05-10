@@ -6,14 +6,25 @@ from django.db import models
 
 # Create your models here.
 
+class Type_сommand(models.Model):
+    type_name = models.CharField(max_length=255)
+
+class Command(models.Model):
+    bot_id = models.ForeignKey('Bot', on_delete=models.CASCADE)
+    command_name = models.CharField(max_length=255)
+    type_id = models.ForeignKey(Type_сommand, on_delete=models.CASCADE)
+    link_status = models.BooleanField(default=0)
+    media_status = models.BooleanField(default=0)
 
 class Bot(models.Model):
     login_id = models.ForeignKey(User, verbose_name='Login id', on_delete=models.CASCADE)
     app_name = models.CharField(verbose_name='App name', max_length=512)
-    token = models.CharField(verbose_name='token', max_length=512)
+    token = models.CharField(verbose_name='Token', max_length=512)
     url = models.CharField(verbose_name='Url', max_length=512)
     name = models.CharField(verbose_name='Name', max_length=255)
     launch_status = models.BooleanField(verbose_name='Status', default=0)
+    commands = models.ManyToManyField(Command, related_name='bots')
+
 
 
 class Bot_chat(models.Model):
@@ -21,16 +32,10 @@ class Bot_chat(models.Model):
     chat_id = models.IntegerField()
 
 
-class Type_command(models.Model):
-    type_name = models.CharField(max_length=255)
 
 
-class Command(models.Model):
-    bot_id = models.ForeignKey(Bot, on_delete=models.CASCADE)
-    command_name = models.CharField(max_length=255)
-    type_id = models.ForeignKey(Type_command, on_delete=models.CASCADE)
-    link_status = models.BooleanField(default=0)
-    media_status = models.BooleanField(default=0)
+
+
 
 
 class Link_command(models.Model):

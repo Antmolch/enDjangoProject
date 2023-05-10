@@ -13,13 +13,21 @@ UserModel = get_user_model()
 class BotDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = Bot
-        fields = '__all__'  # явно указываем все поля модели
+        fields = ("id", 'app_name', 'token', 'url', 'name', 'launch_status') # явно указываем все поля модели
 
+
+class CommandListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Command
+        fields = '__all__'
 
 class BotsListSerializer(serializers.ModelSerializer):
+    commands = CommandListSerializer(many=True, read_only=True)
+
     class Meta:
         model = Bot
-        fields = ("id", 'app_name', 'token', 'url', 'name', 'launch_status', 'login_id')
+        fields = ("id", 'app_name', 'token', 'url', 'name', 'launch_status', 'login_id', 'commands')
+
 
 
 class CommandDetailSerializer(serializers.ModelSerializer):
@@ -28,7 +36,7 @@ class CommandDetailSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class CommandsListView(serializers.ModelSerializer):
+class CommandsListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Command
         fields = ("id", "command_name", "link_status", "media_status", "bot_id_id", "type_id_id")
@@ -48,13 +56,13 @@ class CommandLinksListView(serializers.ModelSerializer):
 
 class CommandTypeDetailSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Type_command
+        model = Type_сommand
         fields = "__all__"
 
 
 class CommandTypesListView(serializers.ModelSerializer):
     class Meta:
-        model = Type_command
+        model = Type_сommand
         fields = "__all__"
 
 
