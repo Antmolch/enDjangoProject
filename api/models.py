@@ -1,61 +1,41 @@
-from datetime import datetime
+import uuid
 
-from django.contrib.auth.models import User
 from django.db import models
+from django.contrib.auth.models import User
 
 
-# Create your models here.
-
-class Type_сommand(models.Model):
-    type_name = models.CharField(max_length=255)
-
-class Command(models.Model):
-    bot_id = models.ForeignKey('Bot', on_delete=models.CASCADE)
-    command_name = models.CharField(max_length=255)
-    type_id = models.ForeignKey(Type_сommand, on_delete=models.CASCADE)
-    link_status = models.BooleanField(default=0)
-    media_status = models.BooleanField(default=0)
 
 class Bot(models.Model):
-    login_id = models.ForeignKey(User, verbose_name='Login id', on_delete=models.CASCADE)
-    app_name = models.CharField(verbose_name='App name', max_length=512)
-    token = models.CharField(verbose_name='Token', max_length=512)
-    url = models.CharField(verbose_name='Url', max_length=512)
-    name = models.CharField(verbose_name='Name', max_length=255)
-    launch_status = models.BooleanField(verbose_name='Status', default=0)
-    commands = models.ManyToManyField(Command, related_name='bots')
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    login_id = models.ForeignKey(User, max_length=255, default=None, on_delete=models.CASCADE)
+    unique_name = models.CharField(max_length=255, default=None)
+    name = models.CharField(max_length=255, default=None)
+    token = models.CharField(max_length=255, default=None)
+    url = models.CharField(max_length=255, default=None)
+    launch_status = models.BooleanField(max_length=255,default=None)
 
+    def __str__(self):
+        return self.name
 
+class TypeCommand(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    name =  models.CharField(max_length=255, default=None)
 
-class Bot_chat(models.Model):
+    def __str__(self):
+        return self.name
+
+class Command(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     bot_id = models.ForeignKey(Bot, on_delete=models.CASCADE)
-    chat_id = models.IntegerField()
+    type_id = models.ManyToManyField(TypeCommand)
+    name = models.CharField(max_length=255,default=None)
+    link_status = models.BooleanField(default=False)
 
+    def __str__(self):
+        return self.name
 
+class CommandCall(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    command_id = models.ForeignKey(Command, on_delete=models.CASCADE,related_name='calls')
 
-
-
-
-
-
-class Link_command(models.Model):
-    current_command = models.ForeignKey(Command, verbose_name='curCmd', related_name='linkcommands_current',
-                                        on_delete=models.CASCADE)
-    following_command = models.ForeignKey(Command, verbose_name='flwCmd', related_name='linkcommands_following',
-                                          on_delete=models.CASCADE)
-
-
-class Media(models.Model):
-    command_id = models.ForeignKey(Command, verbose_name='cmdId', on_delete=models.CASCADE)
-    media = models.TextField(verbose_name="media")
-
-
-class Question_command(models.Model):
-    command_id = models.ForeignKey(Command, verbose_name='cmdId', on_delete=models.CASCADE)
-    answer = models.TextField(verbose_name="answer")
-
-
-class Mail_command(models.Model):
-    command_id = models.ForeignKey(Command, verbose_name='cmdId', on_delete=models.CASCADE)
-    mail = models.TextField(verbose_name="mail")
-    date = models.DateField(default=datetime.now)
+    name = models.CharField(max_length=255,default=None)
