@@ -90,7 +90,19 @@ class  CallsCreateView(generics.CreateAPIView):
     permission_classes = [permissions.IsAuthenticated]
     serializer_class = CommandCallDetailSerializer
 
-#
+class MediaCreateView(generics.CreateAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+    serializer_class = MediaDetailSerializer
+
+
+class MediaListView(generics.ListAPIView):
+
+    permission_classes = [permissions.IsAuthenticated]
+    queryset = Media.objects.all()
+    serializer_class = MediaDetailSerializer
+
+
+
 # class BotDetailView(generics.RetrieveUpdateDestroyAPIView):
 #     permission_classes = [permissions.IsAuthenticated]
 #     serializer_class = BotDetailSerializer

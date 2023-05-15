@@ -111,10 +111,13 @@ class TypeCommandDetailSerializer(serializers.ModelSerializer):
         return data
 
 
+class MediaDetailSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Media
+        fields = ('id','command_id','name','type','file')
+
+
 class CommandsListSerializer(serializers.ModelSerializer):
-
-
-
 
     class Meta:
         model = Command
@@ -130,6 +133,10 @@ class CommandsListSerializer(serializers.ModelSerializer):
         command_calls = instance.calls.all()
         call_data = CommandCallDetailSerializer(command_calls, many=True).data
         representation['calls'] = call_data
+
+        media = Media.objects.filter(command_id=instance)
+        media_data = MediaDetailSerializer(media, many=True).data
+        representation['media'] = media_data
 
         return representation
 
@@ -169,6 +176,12 @@ class CommandDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = Command
         fields = ('id', 'name', 'link_status', 'bot_id', 'type_id')
+
+
+
+
+
+
 
 #
 #

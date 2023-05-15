@@ -16,6 +16,9 @@ urlpatterns = [
 
      path('command/call/all', CallsListView.as_view()),
      path('command/call/create', CallsCreateView.as_view()),
+
+     path('media/create',MediaCreateView.as_view()),
+     path('media/all',MediaListView.as_view())
 #     path('bot/<int:pk>', BotDetailView.as_view()),
 #     #
 #     # path('command/create', CommandCreateView.as_view()),

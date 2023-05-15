@@ -37,5 +37,11 @@ class Command(models.Model):
 class CommandCall(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     command_id = models.ForeignKey(Command, on_delete=models.CASCADE,related_name='calls')
-
     name = models.CharField(max_length=255,default=None)
+
+class Media(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    command_id = models.OneToOneField(Command, on_delete=models.CASCADE,related_name='media')
+    name = models.CharField(max_length=255,default=None)
+    type = models.CharField(max_length=255,default=None)
+    file = models.TextField()
