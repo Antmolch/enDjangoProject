@@ -138,6 +138,14 @@ class CommandsListSerializer(serializers.ModelSerializer):
         media_data = MediaDetailSerializer(media, many=True).data
         representation['media'] = media_data
 
+        message_command = MessageCommand.objects.filter(command_id=instance)
+        message_command_data = MessageCommandDetailSerializer(message_command, many=True).data
+        representation['message_command'] = message_command_data
+
+        mail_command = MailCommand.objects.filter(command_id=instance)
+        mail_command_data = MailCommandDetailSerializer(mail_command, many=True).data
+        representation['mail_command'] = mail_command_data
+
         return representation
 
 
@@ -146,13 +154,18 @@ class CommandsListSerializer(serializers.ModelSerializer):
 
 class BotsListSerializer(serializers.ModelSerializer):
     commands = serializers.SerializerMethodField()
+    chat = serializers.SerializerMethodField()
     class Meta:
         model = Bot
         fields = "__all__"
 
+    def get_chat(self, bot):
+        chats = BotChat.objects.filter(bot_id=bot.id)
+        return BotChatDetailSerializer(chats, many=True).data
+
     def get_commands(self, bot):
         commands = Command.objects.filter(bot_id=bot.id)
-        print("bot id",bot.id)
+        #print("bot id",bot.id)
         return CommandsListSerializer(commands, many=True).data
 
 
@@ -180,9 +193,21 @@ class CommandDetailSerializer(serializers.ModelSerializer):
 
 
 
+class  MessageCommandDetailSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MessageCommand
+        fields = ('id','command_id', 'message')
 
 
+class MailCommandDetailSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MailCommand
+        fields = ('id','command_id','message','datetime')
 
+class BotChatDetailSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = BotChat
+        fields = ("id","bot_id","chat_id")
 #
 #
 # # class CommandLinkDetailSerializer(serializers.ModelSerializer):

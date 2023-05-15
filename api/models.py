@@ -45,3 +45,19 @@ class Media(models.Model):
     name = models.CharField(max_length=255,default=None)
     type = models.CharField(max_length=255,default=None)
     file = models.TextField()
+
+class MessageCommand(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    command_id = models.OneToOneField(Command, on_delete=models.CASCADE,related_name='messageCommand')
+    message = models.TextField()
+
+class MailCommand(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    command_id = models.OneToOneField(Command, on_delete=models.CASCADE,related_name='mailCommand')
+    message = models.TextField()
+    datetime = models.DateTimeField()
+
+class BotChat(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    bot_id = models.ForeignKey(Bot, on_delete=models.CASCADE)
+    chat_id = models.CharField(max_length=32)

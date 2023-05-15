@@ -102,7 +102,35 @@ class MediaListView(generics.ListAPIView):
     serializer_class = MediaDetailSerializer
 
 
+class MessageCommandCreateView(generics.CreateAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+    serializer_class = MessageCommandDetailSerializer
 
+class  MessageCommandListView(generics.ListAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+    queryset = MessageCommand.objects.all()
+    serializer_class = MessageCommandDetailSerializer
+
+class MailCommandCreateView(generics.CreateAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+    serializer_class = MailCommandDetailSerializer
+
+
+class MailCommandListView(generics.ListAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+    queryset = MailCommand.objects.all()
+    serializer_class = MailCommandDetailSerializer
+
+
+class BotChatCreateView(generics.CreateAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+    serializer_class = BotChatDetailSerializer
+
+
+class BotChatListView(generics.ListAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+    queryset = BotChat.objects.all()
+    serializer_class = BotChatDetailSerializer
 # class BotDetailView(generics.RetrieveUpdateDestroyAPIView):
 #     permission_classes = [permissions.IsAuthenticated]
 #     serializer_class = BotDetailSerializer
