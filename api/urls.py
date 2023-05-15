@@ -28,6 +28,10 @@ urlpatterns = [
 
      path('botChat/create', BotChatCreateView.as_view()),
      path('botChat/all', BotChatListView.as_view()),
+
+     path('link/create', LinkCreateView.as_view()),
+     path('link/all', LinkListView.as_view()),
+
 #     path('bot/<int:pk>', BotDetailView.as_view()),
 #     #
 #     # path('command/create', CommandCreateView.as_view()),

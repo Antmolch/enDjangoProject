@@ -146,6 +146,10 @@ class CommandsListSerializer(serializers.ModelSerializer):
         mail_command_data = MailCommandDetailSerializer(mail_command, many=True).data
         representation['mail_command'] = mail_command_data
 
+        link = LinkCommand.objects.filter(current=instance)
+        link_data = LinkDetailSerializer(link, many=True).data
+        representation['link'] = link_data
+
         return representation
 
 
@@ -208,6 +212,11 @@ class BotChatDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = BotChat
         fields = ("id","bot_id","chat_id")
+
+class LinkDetailSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = LinkCommand
+        fields = ("id","current","follow")
 #
 #
 # # class CommandLinkDetailSerializer(serializers.ModelSerializer):

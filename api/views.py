@@ -131,6 +131,16 @@ class BotChatListView(generics.ListAPIView):
     permission_classes = [permissions.IsAuthenticated]
     queryset = BotChat.objects.all()
     serializer_class = BotChatDetailSerializer
+
+
+class LinkCreateView(generics.CreateAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+    serializer_class = LinkDetailSerializer
+
+class LinkListView(generics.ListAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+    queryset = LinkCommand.objects.all()
+    serializer_class = LinkDetailSerializer
 # class BotDetailView(generics.RetrieveUpdateDestroyAPIView):
 #     permission_classes = [permissions.IsAuthenticated]
 #     serializer_class = BotDetailSerializer

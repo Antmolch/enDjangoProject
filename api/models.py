@@ -61,3 +61,8 @@ class BotChat(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     bot_id = models.ForeignKey(Bot, on_delete=models.CASCADE)
     chat_id = models.CharField(max_length=32)
+
+class LinkCommand(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    current = models.ForeignKey(Command, on_delete=models.CASCADE, related_name='current')
+    follow = models.ManyToManyField(Command,  related_name='follow')
