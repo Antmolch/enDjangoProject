@@ -1,3 +1,5 @@
+from uuid import UUID
+
 from rest_framework import serializers
 from django.contrib.auth import get_user_model, authenticate
 from djoser.serializers import UserCreateSerializer
@@ -262,3 +264,11 @@ class CustomTokenSerializer(TokenSerializer):
 
 class BotUUIDSerializer(serializers.Serializer):
     uuid = serializers.UUIDField()
+
+    def validate_uuid(self, value):
+        try:
+            uuid_obj = UUID(value)
+        except (TypeError, ValueError):
+            raise serializers.ValidationError("Invalid UUID format")
+
+        return value
