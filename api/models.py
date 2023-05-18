@@ -2,7 +2,9 @@ import uuid
 
 from django.db import models
 from django.contrib.auth.models import User
-
+from django.db.models.signals import post_migrate
+from django.dispatch import receiver
+from rest_framework.exceptions import ValidationError
 
 
 class Bot(models.Model):
@@ -11,7 +13,7 @@ class Bot(models.Model):
     unique_name = models.CharField(max_length=255, default=None)
     name = models.CharField(max_length=255, default=None)
     token = models.CharField(max_length=255, default=None)
-    url = models.CharField(max_length=255, default=None)
+    url = models.CharField(max_length=255, default="")
     launch_status = models.BooleanField(max_length=255,default=None)
 
     def __str__(self):
@@ -24,10 +26,22 @@ class TypeCommand(models.Model):
     def __str__(self):
         return self.name
 
+
+    def save(self, *args, **kwargs):
+        if self.pk is None:  # Проверяем, что объект не имеет первичного ключа (т.е. новый объект)
+            raise ValidationError("Нельзя добавлять новые объекты TypeCommand.")
+        super().save(*args, **kwargs)
+
+@receiver(post_migrate)
+def create_default_type_commands(sender, **kwargs):
+    if sender.name == 'api':
+        TypeCommand.objects.get_or_create(name='mail')
+        TypeCommand.objects.get_or_create(name='message')
+
 class Command(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     bot_id = models.ForeignKey(Bot, on_delete=models.CASCADE)
-    type_id = models.ManyToManyField(TypeCommand)
+    type_id = models.ForeignKey(TypeCommand, on_delete=models.CASCADE, null=True)
     name = models.CharField(max_length=255,default=None)
     link_status = models.BooleanField(default=False)
 

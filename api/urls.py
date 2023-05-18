@@ -5,14 +5,17 @@ from django.urls import path, include
 from api.views import *
 
 urlpatterns = [
+#     path('bot/<int:pk>', BotDetailView.as_view()),
      path('bot/create', BotCreateView.as_view()),
      path('bot/all', BotsListView.as_view()),
+     path('bot/', BotAPIView.as_view(), name='bot'),
 
      path('commandType/create', TypeCommandCreateView.as_view()),
      path('commandType/all', TypeCommandListView.as_view()),
 
      path('command/create', CommandCreateView.as_view()),
      path('command/all', CommandsListView.as_view()),
+     path('command/<str:pk>', CommandDetailView.as_view()),
 
      path('command/call/all', CallsListView.as_view()),
      path('command/call/create', CallsCreateView.as_view()),
@@ -32,7 +35,7 @@ urlpatterns = [
      path('link/create', LinkCreateView.as_view()),
      path('link/all', LinkListView.as_view()),
 
-#     path('bot/<int:pk>', BotDetailView.as_view()),
+
 #     #
 #     # path('command/create', CommandCreateView.as_view()),
 #     # path('command/all', CommandsListView.as_view()),

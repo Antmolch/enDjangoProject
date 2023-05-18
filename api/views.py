@@ -13,10 +13,9 @@ from rest_framework.authtoken.models import Token
 class BotCreateView(generics.CreateAPIView):
     serializer_class = BotDetailSerializer
 
-    def perform_create(self, serializer, kwargs=None):
+    def perform_create(self, serializer):
         # получаем пользователя из запроса
-
-        request = kwargs['context']['request']
+        request = self.request
         userid = get_user_id_from_request(request)
 
         user = self.request.user
@@ -25,7 +24,6 @@ class BotCreateView(generics.CreateAPIView):
         serializer.validated_data['login_id'] = User.objects.get(id=userid)
         # сохраняем объект
         serializer.save()
-
 
 
     #    permission_classes = [permissions.IsAuthenticated]
@@ -141,6 +139,13 @@ class LinkListView(generics.ListAPIView):
     permission_classes = [permissions.IsAuthenticated]
     queryset = LinkCommand.objects.all()
     serializer_class = LinkDetailSerializer
+
+class CommandDetailView(generics.RetrieveUpdateDestroyAPIView):
+    #permission_classes = [permissions.IsAuthenticated]
+    serializer_class = CommandDetailSerializer
+    queryset = Command.objects.all()
+
+
 # class BotDetailView(generics.RetrieveUpdateDestroyAPIView):
 #     permission_classes = [permissions.IsAuthenticated]
 #     serializer_class = BotDetailSerializer
@@ -155,10 +160,7 @@ class LinkListView(generics.ListAPIView):
 # #
 # #
 # #
-# # class CommandDetailView(generics.RetrieveUpdateDestroyAPIView):
-# #     permission_classes = [permissions.IsAuthenticated]
-# #     serializer_class = CommandDetailSerializer
-# #     queryset = Command.objects.all()
+
 # #
 # #
 # #
@@ -193,5 +195,19 @@ class TypeCommandCreateView(generics.CreateAPIView):
 # #     permission_classes = [permissions.IsAuthenticated]
 # #     serializer_class = CommandLinkDetailSerializer
 # #     queryset = Type_command.objects.all()
-# #
-# #
+
+
+class BotAPIView(generics.GenericAPIView):
+    serializer_class = BotUUIDSerializer
+
+    def post(self, request):
+        # Извлечение UUID из тела запроса
+        uuid = request.data.get('uuid')
+
+        # Поиск бота по UUID
+        try:
+            bot = Bot.objects.get(id=uuid)
+            serializer = BotDetailSerializer(bot)
+            return Response(serializer.data)
+        except Bot.DoesNotExist:
+            return Response({'message': 'Bot not found'}, status=404)

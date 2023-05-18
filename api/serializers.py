@@ -75,7 +75,7 @@ class BotDetailSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Bot
-        fields = '__all__'
+        fields = ('id','unique_name','name','token','url','launch_status')
 
     def validate(self, data):
         """
@@ -90,10 +90,8 @@ class BotDetailSerializer(serializers.ModelSerializer):
         if not data.get('token'):
             raise serializers.ValidationError("Поле token обязательно для заполнения")
 
-        if not data.get('url'):
-            raise serializers.ValidationError("Поле url обязательно для заполнения")
-
-
+        # if not data.get('url'):
+        #     raise serializers.ValidationError("Поле url обязательно для заполнения")
 
         return data
 
@@ -243,20 +241,24 @@ class LinkDetailSerializer(serializers.ModelSerializer):
 # # User = get_user_model()
 # #
 # #
-# # class CustomUserCreateSerializer(UserCreateSerializer):
-# #     def validate_email(self, value):
-# #         if User.objects.filter(email=value).exists():
-# #             raise serializers.ValidationError('Email already exists')
-# #         return value
-# #
-# #     class Meta:
-# #         model = User
-# #         fields = ('id', 'email', 'password','username')
-# #
-# # class CustomTokenSerializer(TokenSerializer):
-# #     user_id = serializers.IntegerField(source='user.id')
-# #
-# #     class Meta(TokenSerializer.Meta):
-# #         fields = TokenSerializer.Meta.fields + ('user_id',)
-# #
-# #
+class CustomUserCreateSerializer(UserCreateSerializer):
+    def validate_email(self, value):
+        if User.objects.filter(email=value).exists():
+            raise serializers.ValidationError('Email already exists')
+        return value
+
+    class Meta:
+        model = User
+        fields = ('id', 'email', 'password','username')
+
+class CustomTokenSerializer(TokenSerializer):
+    user_id = serializers.IntegerField(source='user.id')
+
+    class Meta(TokenSerializer.Meta):
+        fields = TokenSerializer.Meta.fields + ('user_id',)
+
+
+
+
+class BotUUIDSerializer(serializers.Serializer):
+    uuid = serializers.UUIDField()
