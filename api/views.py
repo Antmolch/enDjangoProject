@@ -146,10 +146,7 @@ class CommandDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Command.objects.all()
 
 
-# class BotDetailView(generics.RetrieveUpdateDestroyAPIView):
-#     permission_classes = [permissions.IsAuthenticated]
-#     serializer_class = BotDetailSerializer
-#     queryset = Bot.objects.all()
+#
 #
 #
 #
@@ -197,17 +194,39 @@ class TypeCommandCreateView(generics.CreateAPIView):
 # #     queryset = Type_command.objects.all()
 
 
-class BotAPIView(generics.GenericAPIView):
+# class BotAPIView(generics.GenericAPIView):
+#     serializer_class = BotUUIDSerializer
+#
+#     def post(self, request):
+#         # Извлечение UUID из тела запроса
+#         uuid = request.data.get('uuid')
+#
+#         # Поиск бота по UUID
+#         try:
+#             bot = Bot.objects.get(id=uuid)
+#             serializer = BotDetailSerializer(bot)
+#             return Response(serializer.data)
+#         except Bot.DoesNotExist:
+#             return Response({'message': 'Bot not found'}, status=404)
+
+class BotDetailView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = BotUUIDSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    serializer_class = BotDetailSerializer
+    queryset = Bot.objects.all()
 
-    def post(self, request):
-        # Извлечение UUID из тела запроса
-        uuid = request.data.get('uuid')
+    def delete(self, request, *args, **kwargs):
+        instance = self.get_object()
+        self.perform_destroy(instance)
+        return Response({'message': 'Bot deleted successfully'})
 
-        # Поиск бота по UUID
-        try:
-            bot = Bot.objects.get(id=uuid)
-            serializer = BotDetailSerializer(bot)
-            return Response(serializer.data)
-        except Bot.DoesNotExist:
-            return Response({'message': 'Bot not found'}, status=404)
+    def put(self, request, *args, **kwargs):
+        partial = kwargs.pop('partial', False)
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+        return Response(serializer.data)
+
+    def patch(self, request, *args, **kwargs):
+        return self.put(request, *args, **kwargs)

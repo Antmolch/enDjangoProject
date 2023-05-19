@@ -118,7 +118,6 @@ class MediaDetailSerializer(serializers.ModelSerializer):
 
 
 class CommandsListSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Command
         fields = "__all__"
@@ -163,14 +162,15 @@ class BotsListSerializer(serializers.ModelSerializer):
         model = Bot
         fields = "__all__"
 
+
     def get_chat(self, bot):
         chats = BotChat.objects.filter(bot_id=bot.id)
         return BotChatDetailSerializer(chats, many=True).data
 
     def get_commands(self, bot):
-        commands = Command.objects.filter(bot_id=bot.id)
-        #print("bot id",bot.id)
-        return CommandsListSerializer(commands, many=True).data
+        commands = Command.objects.all()
+
+        return CommandDetailSerializer(commands, many=True).data
 
 
     def __init__(self, *args, **kwargs):
@@ -178,7 +178,7 @@ class BotsListSerializer(serializers.ModelSerializer):
         userid = get_user_id_from_request(request)
         user = User.objects.get(id=userid)
         super().__init__(*args, **kwargs)
-        print(user.id)
+
         self.Meta.queryset = Bot.objects.filter(login_id=user.id)
 
 

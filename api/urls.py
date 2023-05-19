@@ -8,7 +8,8 @@ urlpatterns = [
 #     path('bot/<int:pk>', BotDetailView.as_view()),
      path('bot/create', BotCreateView.as_view()),
      path('bot/all', BotsListView.as_view()),
-     path('bot/', BotAPIView.as_view(), name='bot'),
+     path('bot/<str:pk>/', BotDetailView.as_view(), name='bot-detail'),
+     # path('bot/', BotAPIView.as_view(), name='bot'),
 
      path('commandType/create', TypeCommandCreateView.as_view()),
      path('commandType/all', TypeCommandListView.as_view()),
