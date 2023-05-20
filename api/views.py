@@ -146,7 +146,33 @@ class CommandDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Command.objects.all()
 
 
-#
+class CommandTypeDetailView(generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = TypeCommandDetailSerializer
+    queryset = TypeCommand.objects.all()
+
+class CallsDetailView(generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = CommandCallDetailSerializer
+    queryset = CommandCall.objects.all()
+
+class MediaDetailView(generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = MediaDetailSerializer
+    queryset = Media.objects.all()
+
+class  MessageCommandDetailView(generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = MessageCommandDetailSerializer
+    queryset = MessageCommand.objects.all()
+
+class MailCommandDetailView(generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = MailCommandDetailSerializer
+    queryset = MailCommand.objects.all()
+
+class BotChatDetailView(generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = BotChatDetailSerializer
+    queryset = BotChat.objects.all()
+
+class LinkDetailView(generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = LinkDetailSerializer
+    queryset = LinkCommand.objects.all()
 #
 #
 #
@@ -230,3 +256,4 @@ class BotDetailView(generics.RetrieveUpdateDestroyAPIView):
 
     def patch(self, request, *args, **kwargs):
         return self.put(request, *args, **kwargs)
+
