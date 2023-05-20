@@ -168,7 +168,7 @@ class BotsListSerializer(serializers.ModelSerializer):
         return BotChatDetailSerializer(chats, many=True).data
 
     def get_commands(self, bot):
-        commands = Command.objects.all()
+        commands = Command.objects.filter(bot_id=bot.id)
 
         return CommandDetailSerializer(commands, many=True).data
 
@@ -190,12 +190,24 @@ class TypeCommandListSerializer(serializers.ModelSerializer):
 
 
 class CommandDetailSerializer(serializers.ModelSerializer):
+    message_commands = serializers.SerializerMethodField()
+    mail_commands = serializers.SerializerMethodField()
+    calls = serializers.SerializerMethodField()
     class Meta:
         model = Command
-        fields = ('id', 'name', 'link_status', 'bot_id', 'type_id')
+        fields = ('id', 'name', 'link_status', 'bot_id', 'type_id','message_commands','mail_commands','calls')
 
+    def get_message_commands(self, obj):
+        message_commands = MessageCommand.objects.filter(command_id=obj.id)
+        return MessageCommandDetailSerializer(message_commands, many=True).data
 
+    def get_mail_commands(self,obj):
+        mail_commands = MailCommand.objects.filter(command_id=obj.id)
+        return MailCommandDetailSerializer(mail_commands, many=True).data
 
+    def get_calls(self,obj):
+        calls = CommandCall.objects.filter(command_id=obj.id)
+        return CommandCallDetailSerializer(calls, many=True).data
 
 class  MessageCommandDetailSerializer(serializers.ModelSerializer):
     class Meta:

@@ -41,7 +41,7 @@ def create_default_type_commands(sender, **kwargs):
 class Command(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     bot_id = models.ForeignKey(Bot, on_delete=models.CASCADE)
-    type_id = models.ForeignKey(TypeCommand, on_delete=models.CASCADE, null=True)
+    type_id = models.ForeignKey(TypeCommand, on_delete=models.CASCADE, null=False, default=None)
     name = models.CharField(max_length=255,default=None)
     link_status = models.BooleanField(default=False)
 
