@@ -10,6 +10,17 @@ from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.authtoken.models import Token
 
 
+class UserInfoAPIView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        user = request.user
+        data = {
+            'username': user.username,
+            'email': user.email
+        }
+        return Response(data)
+
 class BotCreateView(generics.CreateAPIView):
     serializer_class = BotDetailSerializer
 

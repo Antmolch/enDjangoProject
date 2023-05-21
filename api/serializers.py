@@ -193,9 +193,11 @@ class CommandDetailSerializer(serializers.ModelSerializer):
     message_commands = serializers.SerializerMethodField()
     mail_commands = serializers.SerializerMethodField()
     calls = serializers.SerializerMethodField()
+    media = serializers.SerializerMethodField()
+    links = serializers.SerializerMethodField()
     class Meta:
         model = Command
-        fields = ('id', 'name', 'link_status', 'bot_id', 'type_id','message_commands','mail_commands','calls')
+        fields = ('id', 'name', 'link_status', 'bot_id', 'type_id','message_commands','mail_commands','calls', 'media','links')
 
     def get_message_commands(self, obj):
         message_commands = MessageCommand.objects.filter(command_id=obj.id)
@@ -208,6 +210,14 @@ class CommandDetailSerializer(serializers.ModelSerializer):
     def get_calls(self,obj):
         calls = CommandCall.objects.filter(command_id=obj.id)
         return CommandCallDetailSerializer(calls, many=True).data
+
+    def get_media(self, obj):
+        calls = Media.objects.filter(command_id=obj.id)
+        return MediaDetailSerializer(calls, many=True).data
+
+    def get_links(self,obj):
+        links = LinkCommand.objects.filter(current_id=obj.id)
+        return  LinkDetailSerializer(links, many=True).data
 
 class  MessageCommandDetailSerializer(serializers.ModelSerializer):
     class Meta:

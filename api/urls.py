@@ -6,6 +6,8 @@ from api.views import *
 
 urlpatterns = [
 #     path('bot/<int:pk>', BotDetailView.as_view()),
+     path('getuser', UserInfoAPIView.as_view()),
+
      path('bot/create', BotCreateView.as_view()),
      path('bot/all', BotsListView.as_view()),
      path('bot/<str:pk>', BotDetailView.as_view(), name='bot-detail'),
